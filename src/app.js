@@ -10,5 +10,4 @@ app.use(cors())
 app.use(express.json())
 app.use(router)
 
-const port = process.env.PORT || 5000;
-app.listen(port, console.log(`Servidor na porta ${process.env.PORT}`))
+app.listen(process.env.PORT, console.log(`Servidor na porta ${process.env.PORT}`))
