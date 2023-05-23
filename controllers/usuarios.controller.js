@@ -46,8 +46,7 @@ export async function signIn(req, res){
 
         const token = uuid();
 
-        // //biblioteca jwt
-        await db.query(`INSERT INTO session (token, "userId", "name") VALUES ($1, $2, $3)`,[token, check.rows[0].id, check.rows[0].name])
+        await db.query(`INSERT INTO session (token, "userId") VALUES ($1, $2)`,[token, check.rows[0].id])
         res.status(200).send({
             userId: check.rows[0].id,
             token: token,
@@ -56,5 +55,45 @@ export async function signIn(req, res){
     }
     catch(err){
         res.status(500).send(err.message)
+    }
+}
+
+export async function meUrl(req, res){
+    try{
+        const userId = res.locals.session.rows[0].userId
+        const consultaId = await db.query(`SELECT * FROM users WHERE id=$1`, [userId])
+        const consultaUrl =await db.query(`SELECT urls.id,urls.url,urls."visitCount",urls."shortUrl" FROM urls WHERE "userId" = $1 ORDER BY "visitCount" DESC`, [userId]);
+        
+        let sumvisitCount = 0;
+        consultaUrl.rows.forEach(row => {
+            sumvisitCount += row.visitCount;   
+        });
+
+        const table = {
+            "id": consultaId.rows[0].id,
+            "name": consultaId.rows[0].name,
+            "visitCount": sumvisitCount,
+            "shortenedUrls":[
+                consultaUrl.rows
+            ]
+
+        }
+
+        res.send(table).status(201)
+    }
+    catch(err){
+        res.send(err.message).status(500)
+    }
+
+}
+
+export async function rankingUrl(req, res){
+    try{
+        const rank = await db.query(`SELECT * FROM users ORDER BY linksCount DESC`)
+
+        res.send(rank).status(200)
+    }
+    catch(err){
+        res.send(err.message).status(500) 
     }
 }
