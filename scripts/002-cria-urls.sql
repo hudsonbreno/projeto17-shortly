@@ -3,5 +3,5 @@ CREATE TABLE "urls" (
     "url" TEXT NOT NULL,
     "visitCount" INT DEFAULT 0,
     "shortUrl" TEXT NOT NULL,
-    "userId" TEXT NOT NULL
+    "userId" INT NOT NULL
 );

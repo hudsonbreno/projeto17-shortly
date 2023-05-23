@@ -88,10 +88,15 @@ export async function meUrl(req, res){
 }
 
 export async function rankingUrl(req, res){
+    //não implementado
+    
     try{
-        const rank = await db.query(`SELECT * FROM users ORDER BY linksCount DESC`)
+        const fazerConta = await db.query(`SELECT * FROM urls`)
 
-        res.send(rank).status(200)
+        const rank = await db.query(`SELECT * FROM users 
+        LEFT JOIN urls ON users.id=urls."userId" ORDER BY "visitCount" DESC`)
+
+        res.send(rank.rows).status(200)
     }
     catch(err){
         res.send(err.message).status(500) 
