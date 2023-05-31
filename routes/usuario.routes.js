@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { validateSchema } from "../../projeto16-boardcamp/middlewares/validateSchema.middlewares.js";
+import { validateSchema } from "../middlewares/validateSchema.middlewares.js";
 import { usuariosSchema, loginSchema }  from "../schemas/usuarios.schema.js";
 import { signUp, signIn, rankingUrl, meUrl } from "../controllers/usuarios.controller.js";
 import { authValidation } from "../middlewares/auth.middleware.js";
